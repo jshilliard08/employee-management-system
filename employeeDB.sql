@@ -21,3 +21,46 @@ CREATE TABLE employee (
     manager_id INT UNSIGNED,
     Index man_id (manager_id)
 )
+INSERT INTO department (name)
+VALUES ("Sales");
+
+INSERT INTO department (name)
+VALUES ("Engineering");
+
+INSERT INTO department (name)
+VALUES ("Finance");
+
+INSERT INTO department (name)
+VALUES ("Legal");
+
+
+INSERT INTO roles (title, salary, department_id)
+VALUES ("Sales-Person", 50000, 1);
+
+INSERT INTO roles (title, salary, department_id)
+VALUES ("Engineer", 90000, 2);
+
+INSERT INTO roles (title, salary, department_id)
+VALUES ("Accountant", 100000, 3);
+
+INSERT INTO roles (title, salary, department_id)
+VALUES ("Lawyer", 150000, 4);
+
+
+INSERT INTO employee (first_name, last_name, roles_id, manager_id)
+VALUES ("Joe", "Smoe", 2, NULL);
+
+INSERT INTO employee (first_name, last_name, roles_id, manager_id)
+VALUES ("Jane", "Doe", 4, NULL);
+
+INSERT INTO employee (first_name, last_name, roles_id, manager_id)
+VALUES ("John", "Smith", 1, 2);
+
+INSERT INTO employee (first_name, last_name, roles_id, manager_id)
+VALUES ("Julia", "Roberts", 3, 1);
+
+
+
+SELECT * FROM department;
+SELECT * FROM roles;
+SELECT * FROM employee;
