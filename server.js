@@ -1,6 +1,15 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const ctable = require("console.table");
+function allByDpt() {
+  console.log("View All by Dept")
+  connection.query("SELECT * FROM department",
+  function(err, res){
+    if (err) throw err
+    console.table(res)
+    emplyoyeeInput();
+  })
+}
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -53,19 +62,70 @@ function emplyoyeeInput() {
           updtEmplyMgr();
       }
       function viewAll() {
-        console.log("viewAllEmp");
-        connection.query('SELECT * FROM employee', (err, res) => {
-            if (err) throw err;
-            console.table(res);
+        console.log("viewAllEmp")
+          connection.query("SELECT * FROM employee", 
+          function(err, res) {
+            if (err) throw err
+            console.table(res)
             emplyoyeeInput();
         });
-        //.then((answer) => {
-        //const query = 'SELECT position, song, year FROM top5000 WHERE ?';
-        //connection.query(query, { artist: answer.artist }, (err, res) => {
-        //res.forEach(({ position, song, year }) => {
-        //console.log(
-        //`Position: ${position} || Song: ${song} || Year: ${year}`
+
       }
+      function allByDpt() {
+        console.log("View All by Dept")
+        connection.query("SELECT * FROM department",
+        function(err, res){
+          if (err) throw err
+          console.table(res)
+          emplyoyeeInput();
+        })
+      }
+      // function allByMgr(){
+      //   console.log("All by Manager")
+      //   connection.query("SELECT * FROM employee WHERE ")
+     // }
+     function addEmply(){
+       console.log("Add Employee")
+       inquirer.prompt([
+         {
+         type: "input",
+         name: "employeeName",
+         message: "What is the employee's first name?",
+         },
+
+         {
+          type: "input",
+          name: "employeeLastName",
+          message: "What is the employee's last name?",
+          },
+         {
+           type: "input",
+           name: "employeeRoleId",
+           message: "What is this employee's role?",
+         },
+
+         {
+         type: "input",
+         name: "employeeManagerId",
+         message: "What is the employee's manager id?",
+         }
+       ])
+       .then((answer) => {
+        connection.query(
+          "INSERT INTO employee SET ?",
+          {
+            first_name: answer.employeeName,
+            last_name: answer.employeeLastName,
+            roles_id: answer.employeeRoleId,
+            manager_id: answer.employeeManagerId,
+          },
+          function (err) {
+            if (err) throw err;
+            console.table(answer);
+            emplyoyeeInput();
+          });
+        });
+      } 
     })
 
 }
