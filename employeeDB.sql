@@ -20,7 +20,7 @@ CREATE TABLE employee (
     Index role_id (role_id), 
     manager_id INT UNSIGNED,
     INDEX man_id (manager_id),
-    FOREIGN KEY (manager_id) REFERENCES employee(id)
+    FOREIGN KEY (manager_id) REFERENCESmployee(id)
 );
 INSERT INTO department (name)
 VALUES ("Sales");
