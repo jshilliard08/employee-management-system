@@ -53,7 +53,7 @@ function employeeInput() {
           updtEmplyRole();
         case "Exit":
           connection.end();
-          break;  
+          break;
       }
     });
 }
@@ -85,8 +85,8 @@ const allByRole = () => {
 };
 
 const addEmply = () => {
-    console.log("Add Employee")
-    inquirer
+  console.log("Add Employee")
+  inquirer
     .prompt([
       {
         name: "firstname",
@@ -153,7 +153,7 @@ const addDpt = () => {
 };
 const addRole = () => {
   connection.query(
-    "SELECT role.title AS Title, role.salary AS Salary, role.department_id AS Department FROM role",
+    "SELECT role.title AS Title, role.salary AS Salary, role.department_id AS Department FROM role JOIN department ON role.department_id = department.id",
     (err, res) => {
       inquirer
         .prompt([
@@ -193,58 +193,58 @@ const addRole = () => {
 };
 
 
-  const updtEmplyRole = () => {
-    connection.query(
-      "SELECT employee.last_name, role.title FROM employee JOIN role ON employee.role_id = role.id;",
-      (err, res) => {
-        if (err) throw err;
-        console.log(res);
-        inquirer
-          .prompt([
-            {
-              name: "lastName",
-              type: "rawlist",
-              message: "What is the Employee's last name? ",
-              choices: () => {
-                var lastName = [];
-                for (var i = 0; i < res.length; i++) {
-                  lastName.push(res[i].last_name);
-                }
-                return lastName;
+const updtEmplyRole = () => {
+  connection.query(
+    "SELECT employee.last_name, role.title FROM employee JOIN role ON employee.role_id = role.id;",
+    (err, res) => {
+      if (err) throw err;
+      console.log(res);
+      inquirer
+        .prompt([
+          {
+            name: "lastName",
+            type: "rawlist",
+            message: "What is the Employee's last name? ",
+            choices: () => {
+              var lastName = [];
+              for (var i = 0; i < res.length; i++) {
+                lastName.push(res[i].last_name);
               }
+              return lastName;
+            }
+          },
+          {
+            name: "role",
+            type: "rawlist",
+            message: "What is the Employees new title? ",
+            choices: selectRole(),
+          },
+        ])
+        .then((val) => {
+          var roleId = selectRole().indexOf(val.role) + 1;
+          connection.query(
+            "UPDATE employee SET WHERE ? ",
+            {
+              last_name: val.lastName,
             },
             {
-              name: "role",
-              type: "rawlist",
-              message: "What is the Employees new title? ",
-              choices: selectRole(),
+              role_id: roleId,
             },
-          ])
-          .then((val) => {
-            var roleId = selectRole().indexOf(val.role) + 1;
-            connection.query(
-              "UPDATE employee SET WHERE ? ",
-              {
-                last_name: val.lastName,
-              },
-              {
-                role_id: roleId,
-              },
-              function (err) {
-                if (err) throw err;
-                employeeInput();
-              }
-            );
-          });
-      }
-    );
-  };
-  
+            function (err) {
+              if (err) throw err;
+              employeeInput();
+            }
+          );
+        });
+    }
+  );
+};
+
 const selectDept = () => {
   connection.query("SELECT * FROM department", (err, res) => {
     if (err) throw err;
     for (var i = 0; i < res.length; i++) {
-      deptArr.push(res[i].name);
+      deptArr.push({ "name": res[i].name, "value": res[i].id });
     }
   });
   return deptArr;
